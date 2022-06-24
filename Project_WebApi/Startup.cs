@@ -32,6 +32,7 @@ namespace Project_WebApi
         {
             services.AddTransient<Seed>();
             services.AddScoped<IPokemonRepository, PokemonRepository>();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()); 
             services.AddDbContext<AppDbContext>(options =>
             {   
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
