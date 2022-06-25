@@ -9,12 +9,17 @@ using System.Threading.Tasks;
 
 namespace Project_WebApi.Helper
 {
+    /// <summary>
+    /// Класс для Mapper. 
+    /// </summary>
     public class MappingProfiles : Profile
     {
         public MappingProfiles()
         {
+            // Сопоставляем класс из которого будут приходить данные и класс в который будут отправляться данные
             CreateMap<Pokemon, PokemonDto>();
-
+            CreateMap<Category, CategoryDto>();
+            CreateMap<Country, CountryDto>();
         }
     }
 }
