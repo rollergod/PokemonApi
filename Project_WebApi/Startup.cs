@@ -35,13 +35,19 @@ namespace Project_WebApi
             services.AddScoped<IPokemonRepository, PokemonRepository>();
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IOwnerRepository, OwnerRepository>();
+            services.AddScoped<IReviewRepository, ReviewRepository>();
+            services.AddScoped<IReviewerRepository, ReviewerRepository>();
             services.AddDbContext<AppDbContext>(options =>
             {   
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
             //services.AddTransient<Seed>();
-            services.AddControllers();
+            services.AddControllersWithViews()
+                    .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Project_WebApi", Version = "v1" });
