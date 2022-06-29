@@ -22,6 +22,7 @@ namespace Project_WebApi.Repositories
             return _context.Categories.Any(c => c.Id == id);
         }
 
+
         public ICollection<Category> GetCategories()
         {
             return _context.Categories.ToList();
@@ -37,6 +38,18 @@ namespace Project_WebApi.Repositories
             return _context.PokemonCategories
                 .Where(p => p.CategoryId == id)
                 .Select(p => p.Pokemon).ToList();
+        }
+        public bool CreateCategory(Category category)
+        {
+            _context.Add(category);
+            return SaveCategory();
+        }
+
+        public bool SaveCategory()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+
         }
     }
 }

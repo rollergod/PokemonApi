@@ -15,6 +15,5 @@ namespace Project_WebApi.Interfaces
         bool CategoryExists(int id);
         bool CreateCategory(Category category);
         bool SaveCategory();
-        //bool CreateCategory(Category category);
     }
 }

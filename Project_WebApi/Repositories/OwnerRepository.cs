@@ -20,6 +20,12 @@ namespace Project_WebApi.Repositories
             _mapper = mapper;
         }
 
+        public bool CreateOwner(Owner owner)
+        {
+            _context.Add(owner);
+            return SaveOwner();
+        }
+
         public Owner GetOwner(int id)
         {
             return _context.Owners.FirstOrDefault(o => o.Id == id);
@@ -49,6 +55,12 @@ namespace Project_WebApi.Repositories
         public bool OwnerExists(int id)
         {
             return _context.Owners.Any(o => o.Id == id);
+        }
+
+        public bool SaveOwner()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
         }
     }
 }
