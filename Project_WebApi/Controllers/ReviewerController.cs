@@ -43,8 +43,7 @@ namespace Project_WebApi.Controllers
             if (!_reviewerRepository.ReviewerExists(id))
                 return NotFound();
 
-            //var reviewer = _mapper.Map<ReviewerDto>(_reviewerRepository.GetReviewer(id));
-            var reviewer = _reviewerRepository.GetReviewer(id);
+            var reviewer = _mapper.Map<ReviewerDto>(_reviewerRepository.GetReviewer(id));
             if (!ModelState.IsValid)
                 return BadRequest();
 
@@ -67,5 +66,33 @@ namespace Project_WebApi.Controllers
             return Ok(reviews);
         }
 
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateReviewer(ReviewerDto reviewerCreate)
+        {
+            if (reviewerCreate == null)
+                return BadRequest();
+
+            var reviewer = _reviewerRepository.GetReviewers()
+                .Where(r => r.FirstName.Trim().ToUpper() == reviewerCreate.FirstName.TrimEnd().ToUpper())
+                .FirstOrDefault();
+
+            if(reviewer != null)
+            {
+                ModelState.AddModelError("", "Reviewer уже существует");
+                return StatusCode(422, ModelState);
+            }
+
+            var reviewerMap = _mapper.Map<Reviewer>(reviewerCreate);
+
+            if (!_reviewerRepository.CreateReviewer(reviewerMap))
+            {
+                ModelState.AddModelError("", "Что-то пошло не так во время сохранения");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Создано успешно");
+        }
     }
 }

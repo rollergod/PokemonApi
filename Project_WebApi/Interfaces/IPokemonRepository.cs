@@ -10,5 +10,7 @@ namespace Project_WebApi.Interfaces
         Pokemon GetPokemon(string Name);
         decimal GetPokemonRating(int Id);
         bool PokemonExists(int id);
+        bool CreatePokemon(int ownerId,int categoryId,Pokemon pokemon);
+        bool SavePokemon();
     }
 }

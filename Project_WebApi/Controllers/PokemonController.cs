@@ -4,6 +4,7 @@ using Project_WebApi.Dto;
 using Project_WebApi.Interfaces;
 using Project_WebApi.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Project_WebApi.Controllers
 {
@@ -34,7 +35,7 @@ namespace Project_WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(200,Type = typeof(Pokemon))]
+        [ProducesResponseType(200, Type = typeof(Pokemon))]
         [ProducesResponseType(400)]
         public IActionResult GetPokemon(int id)
         {
@@ -66,7 +67,7 @@ namespace Project_WebApi.Controllers
         //}
 
         [HttpGet("{id}/rating")]
-        [ProducesResponseType(200,Type = typeof(Pokemon))]
+        [ProducesResponseType(200, Type = typeof(Pokemon))]
         [ProducesResponseType(400)]
         public IActionResult GetPokemonRating(int id)
         {
@@ -81,5 +82,33 @@ namespace Project_WebApi.Controllers
             return Ok(rating);
         }
 
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreatePokemon([FromQuery] int ownerId, [FromQuery] int categoryId, [FromBody] PokemonDto pokemonCreated)
+        {
+            if (pokemonCreated == null)
+                return BadRequest();
+
+            var pokemon = _pokemonRepository.GetPokemons()
+                .Where(p => p.Name.Trim().ToUpper() == pokemonCreated.Name.TrimEnd().ToUpper())
+                .FirstOrDefault();
+
+            if(pokemon != null)
+            {
+                ModelState.AddModelError("", "Pokemon уже существует");
+                return StatusCode(422, ModelState);
+            }
+
+            var pokemonMap = _mapper.Map<Pokemon>(pokemonCreated);
+
+            if (!_pokemonRepository.CreatePokemon(ownerId,categoryId,pokemonMap))
+            {
+                ModelState.AddModelError("", "Что-то пошло не так во время сохранения");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Создано успешно");
+        }
     }
 }

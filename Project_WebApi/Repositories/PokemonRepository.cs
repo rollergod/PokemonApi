@@ -15,6 +15,31 @@ namespace Project_WebApi.Repositories
             this.context = context;
         }
 
+        public bool CreatePokemon(int ownerId, int categoryId, Pokemon pokemon)
+        {
+            var pokemonOwnerEntity = context.Owners.Where(o => o.Id == ownerId).FirstOrDefault();
+            var category = context.Categories.Where(c => c.Id == categoryId).FirstOrDefault();
+
+            var pokemonOwner = new PokemonOwner
+            {
+                Owner = pokemonOwnerEntity,
+                Pokemon = pokemon,
+            };
+
+            context.Add(pokemonOwner);
+
+            var pokemonCategory = new PokemonCategory
+            {
+                Category = category,
+                Pokemon = pokemon,
+            };
+            context.Add(pokemonCategory);
+
+            context.Add(pokemon);
+
+            return SavePokemon();
+        }
+
         public Pokemon GetPokemon(int id)
         {
             return context.Pokemons.FirstOrDefault(pokemon => pokemon.Id == id);
@@ -43,6 +68,12 @@ namespace Project_WebApi.Repositories
         public bool PokemonExists(int id)
         {
             return context.Pokemons.Any(p => p.Id == id);
+        }
+
+        public bool SavePokemon()
+        {
+            var saved = context.SaveChanges();
+            return saved > 0 ? true : false;
         }
     }
 }

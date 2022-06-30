@@ -17,10 +17,18 @@ namespace Project_WebApi.Controllers
     {
         private readonly IReviewRepository _reviewRepository;
         private readonly IMapper _mapper;
-        public ReviewController(IReviewRepository reviewRepository, IMapper mapper)
+        private readonly IReviewerRepository _reviewerRepository;
+        private readonly IPokemonRepository _pokemonRepository;
+
+        public ReviewController(IReviewRepository reviewRepository,
+                                IMapper mapper,
+                                IReviewerRepository reviewerRepository,
+                                IPokemonRepository pokemonRepository)
         {
             _reviewRepository = reviewRepository;
             _mapper = mapper;
+            _reviewerRepository = reviewerRepository;
+            _pokemonRepository = pokemonRepository;
         }
 
         [HttpGet]
@@ -63,6 +71,37 @@ namespace Project_WebApi.Controllers
 
             return Ok(reviews);
 
+        }
+
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateReview([FromQuery] int reviewerId, [FromQuery] int pokemonId,[FromBody] ReviewDto reviewCreate)
+        {
+            if (reviewCreate == null)
+                return BadRequest();
+
+            var review = _reviewRepository.GetReviews()
+                .Where(r => r.Title.Trim().ToUpper() == reviewCreate.Title.TrimEnd().ToUpper())
+                .FirstOrDefault();
+
+            if(review != null)
+            {
+                ModelState.AddModelError("", "Review уже существует");
+                return StatusCode(422, ModelState);
+            }
+
+            var reviewMap = _mapper.Map<Review>(reviewCreate);
+            reviewMap.Pokemon = _pokemonRepository.GetPokemon(pokemonId);
+            reviewMap.Reviewer= _reviewerRepository.GetReviewer(reviewerId);
+
+            if(!_reviewRepository.CreateReview(reviewMap))
+            {
+                ModelState.AddModelError("", "Что-то пошло не так во время сохранения");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Создано успешно");
         }
     }
 }

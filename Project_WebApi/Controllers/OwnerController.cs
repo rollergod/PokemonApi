@@ -70,7 +70,7 @@ namespace Project_WebApi.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         public IActionResult CreateOwner([FromQuery] int countryId,[FromBody]OwnerDto ownerCreated)
         {

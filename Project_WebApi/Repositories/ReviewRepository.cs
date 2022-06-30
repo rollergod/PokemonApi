@@ -20,6 +20,12 @@ namespace Project_WebApi.Repositories
             _mapper = mapper;
         }
 
+        public bool CreateReview(Review review)
+        {
+            _context.Add(review);
+            return SaveReview();
+        }
+
         public Review GetReview(int id)
         {
             return _context.Reviews.FirstOrDefault(r => r.Id == id);
@@ -40,6 +46,12 @@ namespace Project_WebApi.Repositories
         public bool ReviewExists(int id)
         {
             return _context.Reviews.Any(r => r.Id == id);
+        }
+
+        public bool SaveReview()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
         }
     }
 }

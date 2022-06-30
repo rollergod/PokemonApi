@@ -18,6 +18,7 @@ namespace Project_WebApi.Helper
         {
             // Сопоставляем класс из которого будут приходить данные и класс в который будут отправляться данные
             CreateMap<Pokemon, PokemonDto>();
+            CreateMap<PokemonDto, Pokemon>();
             CreateMap<Category, CategoryDto>();
             CreateMap<CategoryDto, Category>();
             CreateMap<Country, CountryDto>();
@@ -25,7 +26,9 @@ namespace Project_WebApi.Helper
             CreateMap<Owner, OwnerDto>();
             CreateMap<OwnerDto, Owner>();
             CreateMap<Review, ReviewDto>();
+            CreateMap<ReviewDto, Review>();
             CreateMap<Reviewer, ReviewerDto>();
+            CreateMap<ReviewerDto, Reviewer>();
 
         }
     }

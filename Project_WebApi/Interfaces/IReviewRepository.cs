@@ -13,5 +13,7 @@ namespace Project_WebApi.Interfaces
         Review GetReview(int id);
         ICollection<Review> GetReviewsOfAPokemon(int pokemonId);
         bool ReviewExists(int id);
+        bool CreateReview(Review review);
+        bool SaveReview();
     }
 }
