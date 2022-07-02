@@ -49,7 +49,17 @@ namespace Project_WebApi.Repositories
         {
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
+        }
+        public bool UpdateCategory(Category category)
+        {
+            _context.Update(category);
+            return SaveCategory();
+        }
 
+        public bool DeleteCategory(Category category)
+        {
+            _context.Remove(category);
+            return SaveCategory();
         }
     }
 }

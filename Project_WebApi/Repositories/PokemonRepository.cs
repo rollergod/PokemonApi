@@ -40,6 +40,12 @@ namespace Project_WebApi.Repositories
             return SavePokemon();
         }
 
+        public bool DeletePokemon(Pokemon pokemon)
+        {
+            context.Remove(pokemon);
+            return SavePokemon();
+        }
+
         public Pokemon GetPokemon(int id)
         {
             return context.Pokemons.FirstOrDefault(pokemon => pokemon.Id == id);
@@ -74,6 +80,12 @@ namespace Project_WebApi.Repositories
         {
             var saved = context.SaveChanges();
             return saved > 0 ? true : false;
+        }
+
+        public bool UpdatePokemon(int ownerId, int categoryId, Pokemon pokemon)
+        {
+            context.Update(pokemon);
+            return SavePokemon();
         }
     }
 }

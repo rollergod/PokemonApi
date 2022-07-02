@@ -27,6 +27,12 @@ namespace Project_WebApi.Repositories
             return SaveReviewer();
         }
 
+        public bool DeleteReviewer(Reviewer reviewer)
+        {
+            _context.Remove(reviewer);
+            return SaveReviewer();
+        }
+
         public Reviewer GetReviewer(int id)
         {
             return _context.Reviewers.Where(r => r.Id == id).Include(e => e.Reviews).FirstOrDefault();
@@ -51,6 +57,12 @@ namespace Project_WebApi.Repositories
         {
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
+        }
+
+        public bool UpdateReviewer(Reviewer reviewer)
+        {
+            _context.Update(reviewer);
+            return SaveReviewer();
         }
     }
 }

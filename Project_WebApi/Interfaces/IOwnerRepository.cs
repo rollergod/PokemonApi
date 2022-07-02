@@ -15,6 +15,8 @@ namespace Project_WebApi.Interfaces
         ICollection<Pokemon> GetPokemonsByOwner(int ownerId);
         bool OwnerExists(int id);
         bool CreateOwner(Owner owner);
+        bool UpdateOwner(Owner owner);
+        bool DeleteOwner(Owner owner);
         bool SaveOwner();
     }
 }

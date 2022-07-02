@@ -14,6 +14,8 @@ namespace Project_WebApi.Interfaces
         ICollection<Pokemon> GetPokemonByCategory(int id);
         bool CategoryExists(int id);
         bool CreateCategory(Category category);
+        bool UpdateCategory(Category category);
+        bool DeleteCategory(Category category);
         bool SaveCategory();
     }
 }

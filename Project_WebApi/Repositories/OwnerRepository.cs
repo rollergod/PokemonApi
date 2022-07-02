@@ -5,8 +5,6 @@ using Project_WebApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Project_WebApi.Repositories
 {
@@ -23,6 +21,12 @@ namespace Project_WebApi.Repositories
         public bool CreateOwner(Owner owner)
         {
             _context.Add(owner);
+            return SaveOwner();
+        }
+
+        public bool DeleteOwner(Owner owner)
+        {
+            _context.Remove(owner);
             return SaveOwner();
         }
 
@@ -61,6 +65,12 @@ namespace Project_WebApi.Repositories
         {
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
+        }
+
+        public bool UpdateOwner(Owner owner)
+        {
+            _context.Update(owner);
+            return SaveOwner();
         }
     }
 }

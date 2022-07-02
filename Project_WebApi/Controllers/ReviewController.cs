@@ -103,5 +103,54 @@ namespace Project_WebApi.Controllers
 
             return Ok("Создано успешно");
         }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateReview(int id, [FromBody] ReviewDto updatedReview)
+        {
+            if (updatedReview == null)
+                return BadRequest(ModelState);
+
+            if (id != updatedReview.Id)
+                return BadRequest(ModelState);
+
+            if (!_reviewRepository.ReviewExists(id))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var reviewMap = _mapper.Map<Review>(updatedReview);
+
+            if(!_reviewRepository.UpdateReview(reviewMap))
+            {
+                ModelState.AddModelError("", "Что-то пошло не так");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteReview(int id)
+        {
+            if (!_reviewRepository.ReviewExists(id))
+                return NotFound();
+
+            var reviewToDelete = _reviewRepository.GetReview(id);
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            if (!_reviewRepository.DeleteReview(reviewToDelete))
+                ModelState.AddModelError("", "Что-то пошло не так во время удаления");
+
+            return NoContent();
+        }
     }
 }

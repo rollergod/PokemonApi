@@ -99,5 +99,54 @@ namespace Project_WebApi.Controllers
 
             return Ok("Создано успешно");
         }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateOwner(int id, [FromBody] OwnerDto updatedOwner)
+        {
+            if (updatedOwner == null)
+                return BadRequest(ModelState);
+
+            if (id != updatedOwner.Id)
+                return BadRequest(ModelState);
+
+            if (!_ownerRepository.OwnerExists(id))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var ownerMap = _mapper.Map<Owner>(updatedOwner);
+
+            if(!_ownerRepository.UpdateOwner(ownerMap))
+            {
+                ModelState.AddModelError("", "Что-то пошло не так во время сохранения");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteOwner(int id)
+        {
+            if (!_ownerRepository.OwnerExists(id))
+                return NotFound();
+
+            var ownerToDelete = _ownerRepository.GetOwner(id);
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            if (!_ownerRepository.DeleteOwner(ownerToDelete))
+                ModelState.AddModelError("", "Что-то пошло не так во время удаления");
+
+            return NoContent();
+        }
     }
 }

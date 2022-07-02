@@ -26,6 +26,18 @@ namespace Project_WebApi.Repositories
             return SaveReview();
         }
 
+        public bool DeleteReview(Review review)
+        {
+            _context.Remove(review);
+            return SaveReview();
+        }
+
+        public bool DeleteReviews(List<Review> reviews)
+        {
+            _context.RemoveRange(reviews);
+            return SaveReview();
+        }
+
         public Review GetReview(int id)
         {
             return _context.Reviews.FirstOrDefault(r => r.Id == id);
@@ -52,6 +64,12 @@ namespace Project_WebApi.Repositories
         {
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
+        }
+
+        public bool UpdateReview(Review review)
+        {
+            _context.Update(review);
+            return SaveReview();
         }
     }
 }

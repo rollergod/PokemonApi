@@ -113,5 +113,55 @@ namespace Project_WebApi.Controllers
             return Ok("Создано успешно");
         }
 
+        [HttpPut("{id}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateCountry(int id, [FromBody] CountryDto updatedCountry)
+        {
+            if (updatedCountry == null)
+                return BadRequest(ModelState);
+
+            if (id != updatedCountry.Id)
+                return BadRequest(ModelState);
+
+            if (!_countryRepository.CountryExists(id))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var countryMap = _mapper.Map<Country>(updatedCountry);
+
+            if(!_countryRepository.UpdateCountry(countryMap))
+            {
+                ModelState.AddModelError("", "Что-то пошло не так во время обновления");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteCountry(int id)
+        {
+            if (!_countryRepository.CountryExists(id))
+                return NotFound();
+
+            var countryToDelete = _countryRepository.GetCountry(id);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_countryRepository.DeleteCountry(countryToDelete))
+                ModelState.AddModelError("", "Что-то пошло не так во время удаления");
+
+            return NoContent();
+        }
+
+
     }
 }
