@@ -3,11 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Project_WebApi.Dto;
 using Project_WebApi.Interfaces;
 using Project_WebApi.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Project_WebApi.Controllers
 {
@@ -93,7 +90,7 @@ namespace Project_WebApi.Controllers
                 .Where(c => c.Name.Trim().ToUpper() == countryCreate.Name.TrimEnd().ToUpper())
                 .FirstOrDefault();
 
-            if(country != null)
+            if (country != null)
             {
                 ModelState.AddModelError("", "Country уже существует");
                 return StatusCode(422, ModelState);
@@ -133,7 +130,7 @@ namespace Project_WebApi.Controllers
 
             var countryMap = _mapper.Map<Country>(updatedCountry);
 
-            if(!_countryRepository.UpdateCountry(countryMap))
+            if (!_countryRepository.UpdateCountry(countryMap))
             {
                 ModelState.AddModelError("", "Что-то пошло не так во время обновления");
                 return StatusCode(500, ModelState);

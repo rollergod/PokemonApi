@@ -3,11 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Project_WebApi.Dto;
 using Project_WebApi.Interfaces;
 using Project_WebApi.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Project_WebApi.Controllers
 {
@@ -53,7 +50,7 @@ namespace Project_WebApi.Controllers
 
             var review = _mapper.Map<ReviewDto>(_reviewRepository.GetReview(id));
 
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest();
 
             return Ok(review);
@@ -76,7 +73,7 @@ namespace Project_WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateReview([FromQuery] int reviewerId, [FromQuery] int pokemonId,[FromBody] ReviewDto reviewCreate)
+        public IActionResult CreateReview([FromQuery] int reviewerId, [FromQuery] int pokemonId, [FromBody] ReviewDto reviewCreate)
         {
             if (reviewCreate == null)
                 return BadRequest();
@@ -85,7 +82,7 @@ namespace Project_WebApi.Controllers
                 .Where(r => r.Title.Trim().ToUpper() == reviewCreate.Title.TrimEnd().ToUpper())
                 .FirstOrDefault();
 
-            if(review != null)
+            if (review != null)
             {
                 ModelState.AddModelError("", "Review уже существует");
                 return StatusCode(422, ModelState);
@@ -93,9 +90,9 @@ namespace Project_WebApi.Controllers
 
             var reviewMap = _mapper.Map<Review>(reviewCreate);
             reviewMap.Pokemon = _pokemonRepository.GetPokemon(pokemonId);
-            reviewMap.Reviewer= _reviewerRepository.GetReviewer(reviewerId);
+            reviewMap.Reviewer = _reviewerRepository.GetReviewer(reviewerId);
 
-            if(!_reviewRepository.CreateReview(reviewMap))
+            if (!_reviewRepository.CreateReview(reviewMap))
             {
                 ModelState.AddModelError("", "Что-то пошло не так во время сохранения");
                 return StatusCode(500, ModelState);
@@ -124,7 +121,7 @@ namespace Project_WebApi.Controllers
 
             var reviewMap = _mapper.Map<Review>(updatedReview);
 
-            if(!_reviewRepository.UpdateReview(reviewMap))
+            if (!_reviewRepository.UpdateReview(reviewMap))
             {
                 ModelState.AddModelError("", "Что-то пошло не так");
                 return StatusCode(500, ModelState);

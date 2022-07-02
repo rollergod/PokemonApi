@@ -98,7 +98,7 @@ namespace Project_WebApi.Controllers
                 .Where(p => p.Name.Trim().ToUpper() == pokemonCreated.Name.TrimEnd().ToUpper())
                 .FirstOrDefault();
 
-            if(pokemon != null)
+            if (pokemon != null)
             {
                 ModelState.AddModelError("", "Pokemon уже существует");
                 return StatusCode(422, ModelState);
@@ -106,7 +106,7 @@ namespace Project_WebApi.Controllers
 
             var pokemonMap = _mapper.Map<Pokemon>(pokemonCreated);
 
-            if (!_pokemonRepository.CreatePokemon(ownerId,categoryId,pokemonMap))
+            if (!_pokemonRepository.CreatePokemon(ownerId, categoryId, pokemonMap))
             {
                 ModelState.AddModelError("", "Что-то пошло не так во время сохранения");
                 return StatusCode(500, ModelState);
@@ -138,10 +138,10 @@ namespace Project_WebApi.Controllers
 
             var pokemonMap = _mapper.Map<Pokemon>(updatedPokemon);
 
-            if(!_pokemonRepository.UpdatePokemon(ownerId, categoryId, pokemonMap))
+            if (!_pokemonRepository.UpdatePokemon(ownerId, categoryId, pokemonMap))
             {
                 ModelState.AddModelError("", "Что-то пошло не так во время обновления");
-                return StatusCode(500,ModelState);
+                return StatusCode(500, ModelState);
             }
 
             return NoContent();

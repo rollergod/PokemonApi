@@ -3,11 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Project_WebApi.Dto;
 using Project_WebApi.Interfaces;
 using Project_WebApi.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Project_WebApi.Controllers
 {
@@ -26,7 +23,7 @@ namespace Project_WebApi.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(200,Type = typeof(IEnumerable<Owner>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<Owner>))]
         public IActionResult GetOwners()
         {
             var owners = _mapper.Map<List<OwnerDto>>(_ownerRepository.GetOwners());
@@ -38,7 +35,7 @@ namespace Project_WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(200,Type = typeof(Owner))]
+        [ProducesResponseType(200, Type = typeof(Owner))]
         [ProducesResponseType(400)]
         public IActionResult GetOwnerById(int id)
         {
@@ -54,7 +51,7 @@ namespace Project_WebApi.Controllers
         }
 
         [HttpGet("{ownerId}/pokemons")]
-        [ProducesResponseType(200,Type = typeof(IEnumerable<Pokemon>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<Pokemon>))]
         [ProducesResponseType(400)]
         public IActionResult GetPokemonsByOwnerId(int ownerId)
         {
@@ -72,7 +69,7 @@ namespace Project_WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateOwner([FromQuery] int countryId,[FromBody]OwnerDto ownerCreated)
+        public IActionResult CreateOwner([FromQuery] int countryId, [FromBody] OwnerDto ownerCreated)
         {
             if (ownerCreated == null)
                 return BadRequest();
@@ -81,7 +78,7 @@ namespace Project_WebApi.Controllers
                 .Where(o => o.FirstName.Trim().ToUpper() == ownerCreated.FirstName.TrimEnd().ToUpper())
                 .FirstOrDefault();
 
-            if(owner != null)
+            if (owner != null)
             {
                 ModelState.AddModelError("", "Owner уже существует");
                 return StatusCode(422, ModelState);
@@ -120,7 +117,7 @@ namespace Project_WebApi.Controllers
 
             var ownerMap = _mapper.Map<Owner>(updatedOwner);
 
-            if(!_ownerRepository.UpdateOwner(ownerMap))
+            if (!_ownerRepository.UpdateOwner(ownerMap))
             {
                 ModelState.AddModelError("", "Что-то пошло не так во время сохранения");
                 return StatusCode(500, ModelState);

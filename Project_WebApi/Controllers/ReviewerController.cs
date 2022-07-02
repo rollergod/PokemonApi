@@ -3,11 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Project_WebApi.Dto;
 using Project_WebApi.Interfaces;
 using Project_WebApi.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Project_WebApi.Controllers
 {
@@ -24,7 +21,7 @@ namespace Project_WebApi.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(200,Type = typeof(IEnumerable<Reviewer>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<Reviewer>))]
         public IActionResult GetReviewers()
         {
             var reviewers = _mapper.Map<List<ReviewerDto>>(_reviewerRepository.GetReviewers());
@@ -78,7 +75,7 @@ namespace Project_WebApi.Controllers
                 .Where(r => r.FirstName.Trim().ToUpper() == reviewerCreate.FirstName.TrimEnd().ToUpper())
                 .FirstOrDefault();
 
-            if(reviewer != null)
+            if (reviewer != null)
             {
                 ModelState.AddModelError("", "Reviewer уже существует");
                 return StatusCode(422, ModelState);
@@ -110,12 +107,12 @@ namespace Project_WebApi.Controllers
             if (!_reviewerRepository.ReviewerExists(id))
                 return NotFound();
 
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest();
 
             var reviewerMap = _mapper.Map<Reviewer>(updatedReviewer);
 
-            if(!_reviewerRepository.UpdateReviewer(reviewerMap))
+            if (!_reviewerRepository.UpdateReviewer(reviewerMap))
             {
                 ModelState.AddModelError("", "Что-то пошло не так во время обновления");
                 return StatusCode(500, ModelState);

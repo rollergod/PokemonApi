@@ -2,11 +2,8 @@
 using Project_WebApi.Data;
 using Project_WebApi.Interfaces;
 using Project_WebApi.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Project_WebApi.Repositories
 {
@@ -15,7 +12,7 @@ namespace Project_WebApi.Repositories
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
 
-        public CountryRepository(AppDbContext context,IMapper mapper)
+        public CountryRepository(AppDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
