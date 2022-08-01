@@ -61,7 +61,7 @@ namespace Project_WebApi.Repositories
             return SaveCountry();
         }
 
-        public bool DeleteCountry(int id)
+        public bool DeleteCountry(Country country)
         {
             _context.Remove(country);
             return SaveCountry();

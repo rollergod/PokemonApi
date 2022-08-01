@@ -114,7 +114,6 @@ namespace Project_WebApi.Controllers
 
             if (!ModelState.IsValid)
                 return BadRequest();
-
             var ownerMap = _mapper.Map<Owner>(updatedOwner);
 
             if (!_ownerRepository.UpdateOwner(ownerMap))
